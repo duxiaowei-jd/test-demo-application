@@ -16,7 +16,7 @@ apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
 
 group = 'com.fintell'
-version = '0.0.1-SNAPSHOT'
+//version = '0.0.1-SNAPSHOT'
 sourceCompatibility = 1.8
 
 // zqz 20180730 打jar包时指定启动类
@@ -25,9 +25,9 @@ jar {
     attributes(
     	"Implementation-Title" : project.name
     )
-    attributes(
-      	"Implementation-Version": version
-    )
+//    attributes(
+//     	"Implementation-Version": version
+//   )
     attributes(
       	"Main-Class":"com.fintell.demo.SpringBootDemoApplication"
     )
@@ -43,3 +43,25 @@ dependencies {
 	runtime('mysql:mysql-connector-java')
 	testCompile('org.springframework.boot:spring-boot-starter-test')
 }
+
+task copyCommonConfFile(type: Copy) {
+    from "${rootDir}/script/"
+    into "build/libs/"
+}
+
+jar.dependsOn += copyCommonConfFile 
+
+// def time = new Date().format("yyyyMMddHHmmss", TimeZone.getTimeZone("UTC")); 
+
+def time = new Date().format("yyyyMMdd'T'HHmm", TimeZone.getTimeZone("GMT+8")); 
+
+/**
+ * 执行zip打包操作
+ */
+task buildZip(type: Zip) {
+    from 'build/libs'
+    destinationDir file('build/')
+    baseName 'test-demo-application_'+time
+}
+
+build.dependsOn += buildZip
