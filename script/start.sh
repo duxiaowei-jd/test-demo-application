@@ -11,16 +11,17 @@ echo $pr
 if [ -z "$pr" ];then
 	echo "-------------starting process------------------------"
 	nohup $JAVA_HOME/bin/java -jar $APP_HOME/$APP_NAME.jar  $JAVA_OPTS > $APP_HOME/nohup.out 2>&1 &
+        sleep 5
 	pr=`ps ax | grep java | grep $APP_NAME | egrep -v "grep" `
 	if [ -z "$pr" ];then
-		echo -e "[ \033[31m  \033[5m process start fail \033[0m ]"
+		echo "process start fail"
                 exit 1
 	else
-		echo -e "[ \033[32m  \033[5m process start success \033[0m ]"
+		echo "process start success"
 		echo "process info:"
 		echo $pr
 	fi
 else
-	echo -e "[ \033[31m \033[5m process alread started \033[0m ]"
+	echo "process alread started"
         exit 1
 fi
